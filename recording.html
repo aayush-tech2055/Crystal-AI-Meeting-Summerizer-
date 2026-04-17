@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<button onclick="startRecording()">Start Recording</button>
+<button onclick="stopRecording()">Stop Recording</button>
+
+<script>
+let mediaRecorder;
+let audioChunks = [];
+
+async function startRecording() {
+    console.log("Start clicked");
+
+    const stream = await navigator.mediaDevices.getDisplayMedia({
+        video: true,
+        audio: true
+    });
+
+    const audioTrack = stream.getAudioTracks()[0];
+    const audioStream = new MediaStream([audioTrack]);
+
+    mediaRecorder = new MediaRecorder(audioStream);
+
+    mediaRecorder.ondataavailable = event => {
+        if (event.data.size > 0) {
+            audioChunks.push(event.data);
+        }
+    };
+
+    mediaRecorder.start();
+}
+
+function stopRecording() {
+    mediaRecorder.stop();
+
+    mediaRecorder.onstop = async () => {
+        console.log("Recording stopped");
+    };
+}
+</script>
+
+</body>
+</html>

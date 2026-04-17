@@ -1,0 +1,5 @@
+whisper
+faiss-cpu
+sentence-transformers
+ollama
+numpy
